@@ -1,39 +1,28 @@
-import React, { useState, useRef } from 'react';
+import React, {  useRef } from 'react';
 
 import classes from './FormAccount.module.css';
 
-function FormAccount() {
+function FormAccount(props) {
 
-    const [account, setAccount] = useState(0);
-    const [totalAccount, setTotalAccount] = useState(null);
     const initialAmountRef = useRef('');
     const monthlyAmmountRef = useRef('');
     const interestRef = useRef('');
     const durationRef = useRef('');
 
+
     function submitHandler(event) {
         event.preventDefault();
 
-        let initialAmount = parseInt(initialAmountRef.current.value);
-        let monthlyAmmount = parseInt(monthlyAmmountRef.current.value);
-        let interest = parseInt(interestRef.current.value);
-        let duration = parseInt(durationRef.current.value);
-
-        for (let i = 1; i <= duration; i++) {
-            let MonthlyTotal;
-            if(totalAccount) {
-                MonthlyTotal = totalAccount + monthlyAmmount
-            } else {
-                MonthlyTotal = initialAmount + monthlyAmmount
-            }
-            
-            let interestPerMonth = MonthlyTotal * (interest / 100);
-            setTotalAccount(MonthlyTotal + interestPerMonth);            
-          
+        const result = {
+            amount: 0,
+            initialAmount: parseInt(initialAmountRef.current.value),
+            monthlyAmmount: parseInt(monthlyAmmountRef.current.value),
+            interest: parseInt(interestRef.current.value),
+            duration: parseInt(durationRef.current.value),
         }
-
-        setAccount(totalAccount);
-
+        
+        props.addResult(result);
+        props.isShow();
     }
 
     return (
@@ -55,7 +44,6 @@ function FormAccount() {
                 <input type='number' id='duration' ref={durationRef} />
             </div>
             <button>See my account</button>
-            <div className={classes.control}>{account}</div>
         </form>
     );
 }
